@@ -1,0 +1,640 @@
+\documentclass[11pt,a4paper]{colorart}
+
+
+\usepackage{amsmath}
+\usepackage{amsfonts,amssymb}
+\usepackage{tikz-cd}
+\usepackage{hyperref}
+\usepackage{quiver}
+
+\def\maa{\mathcal}
+\def\mab{\mathfrak}
+\def\mac{\mathbb}
+\def\rar{\rightarrow}
+\def\tx{\times}
+\def\oo{\circ}
+\def\ra{\rightarrow}
+
+\title{Category theory Notes}
+
+\author{Raakesh M, 21MS116}
+\date{updated on \today}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\newpage
+
+\section{Preamble}
+
+Notes for category theory following Serge Lang's Algebra, section 11 of chapter 1.
+
+\section{Basic definitions and examples}
+
+\subsection{Category}
+
+\begin{definition}[Category]
+	%\newline
+	A category $\mab{a}$ consists of,
+	\begin{itemize}
+		\item Collection of objects ob$(\mab{a})$,
+		\item A set Mor$(A,B)$ for any two objects $A,B \in \text{ob}(\mab{a})$ called the morphisms of $A$ into $B$,
+		\item And a "Law of composition" $L$ for any three objects $A,B,C \in \text{ob}(\mab{a})$, ie: a map,
+		\[ L : \text{Mor}(B,C) \tx \text{Mor}(A,B) \rar \text{Mor}(A,C). \]
+	\end{itemize}
+
+	(If there arises no confusion $L(f,g)$ will be simply denoted as $f\oo g$.)
+
+	Satisfying the following axioms:
+
+	\begin{itemize}
+		\item \textit{CAT 1} Two sets Mor$(A,B)$ and Mor$(A^\prime,B^\prime)$ are disjoint unless $A=A^\prime$ and $B=B^\prime$.
+		\item \textit{CAT 2} For each object $A$, there is a morphism Id$_A \in \text{Mor}(A,A)$ which acts as left identity and right identity for the elements of Mor$(A,B)$ and Mor$(B,A)$ respectively for all $B \in \text{ob}(\mab{a})$.
+		\item \textit{CAT 3} The law of composition is associative (when defined), ie: given $f \in \text{Mor}(A,B)$, $g \in \text{Mor}(B,C))$ and $h \in \text{Mor}(C,D)$ we have:
+			\[ (f \oo g) \oo h = f \oo (g \oo h) \]
+			for all $A,B,C,D \in \text{ob}(\mab{a})$.
+	\end{itemize}
+
+\end{definition} 
+
+We shall denote collection of all morphisms in a category as $\text{Ar}(\mab{a})$, and "$f \in \text{Ar}(\mab{a})$" shall mean $f \in \text{Mor}(A,B)$ is a morphism for some $A,B \in \text{Ob}(\mab{a})$. We shall also refer to the collection of objects of a category as the category itself.
+
+\begin{definition}[Isomorphism]
+	$f \in \text{Mor}(A,B)$ is called an isomorphism if there exists $g \in \text{Mor}(B,A)$ such that $f \oo g = \text{Id}_B $ and $g \oo f = \text{Id}_A $, Set of all isomorphisms of $A$ into $B$ is represented by Iso$(A,B)$.
+\end{definition}
+
+\begin{definition}[Endomorphism]
+Any morphism of an object into itself is called an endomorphism.
+\end{definition}
+
+\begin{definition}[Automorphism]
+	Any endomorphism which is also an isomorphism is called an automorphism. Set of all automorphisms of an object $A$ is represented as Aut$(A)$.
+\end{definition}
+
+\begin{proposition}
+	Aut$(A)$ forms a group with law of composition as the binary operator.
+\end{proposition}
+
+\begin{proof}
+	Associativity of the binary operator is satisfied by definition, Id$_A$ acts as the identity element and for a morphism $f$, its inverse is the morphism $g$ such that $f \oo g = \text{Id}_A$. \\
+	Therefore all group axioms are satisfied.
+\end{proof}
+
+\begin{example}[Category of sets]
+	Let $\mab{S}$ be a category whose objects are sets and let the morphisms be maps between sets. \textit{CAT 1} is clearly true, \textit{CAT 2} is true as we let identity map be Id$_A$ for set $A$ and \textit{CAT 3} is also true as composition of maps clearly follow associativity.
+\end{example}
+
+\begin{example}[Category of groups]
+	Let Grp be a category whose objects are groups and let the morphisms be group homomorphisms between groups.
+\end{example}
+
+\begin{example}[Category of monoids]
+	Let Grp be a category whose objects are groups and let the morphisms be monoid homomorphisms between groups.
+\end{example}
+
+\begin{example}[$G$-sets]
+	Given a group $G$ a $G$-set is a set $X$ with a map $\sigma : G \ra \text{S}(X)$ from group $G$ to the symmetric group of $X$. \\
+	Category of $G$-sets is a category whose objects are $G$-sets and set of morphisms of $X$ into $X^\prime$ with corresponding maps $\sigma$ and $\sigma^\prime$ are maps $f : X \ra X^\prime$ such that $f(\sigma(g)(x)) = \sigma^\prime(g)(f(x))$ for all $x \in X$ and for all $g \in G$.
+\end{example}
+
+\begin{definition}[Operation]
+	An operation of a group $G$ on an object $A$ is a group isomorphism of $G$ into the group Aut$(A)$.
+\end{definition}
+
+An operation of $G$ on $A$ is also called a representation of $G$ on $A$. \\
+
+\subsection{Automorphisms operating on Isomorphisms}
+
+We can also say  the group Aut$(B)$ operates on Iso$(A,B)$ via "law of composition", ie:
+
+\[ \sigma: \text{Aut}(B) \ra \text{S}(\text{Iso}(A,B)) \]
+
+where S$($Iso$(A,B))$ is the symmetric group of Iso$(A,B)$ and $\sigma(p)(q) = p \oo q$.\\
+
+If $u_\oo$ and $u$ are in Iso$(A,B)$ then there exists $u^{-1}_\oo$ in Iso$(B,A)$ such that $u^{-1}_\oo \oo u_\oo = \text{Id}_B \in \text{Aut}(B)$ as $u_\oo$ is an isomorphism, then 
+
+\[  u \oo u^{-1}_\oo \oo u_\oo = u \]
+
+\[ \implies ( u \oo u^{-1}_\oo ) \oo u_\oo = u \]
+
+\[ \implies \sigma ( u \oo u^{-1}_\oo ) ( u_\oo ) = u \]
+
+Therefore we have, $\text{Orb}_{\text{Aut}(B)} u_\oo = \text{Iso}(A,B)$ and $\varphi: \text{Aut}(B) \ra \text{Iso}(A,B), u \ra u \oo u_\oo$ is a bijection where the inverse is given by $\varphi^{-1}: \text{Iso}(A,B) \ra \text{Aut}(B), u \ra u \oo u^{-1}_\oo$.\\
+
+Similarly with Aut$(A)$ composing on the other side we get if there exists $u \in \text{Iso}(A,B)$ then Aut$(A)$ and Aut$(B)$ are isomorphic, namely 
+
+\[ \phi : \text{Aut}(A) \ra \text{Aut}(B), \phi(w) = u \oo w \oo u^{-1} \]
+
+is a group isomorphism and above can be visualized with the commutative diagram.\\
+
+% https://q.uiver.app/#q=WzAsNCxbMCwwLCJBIl0sWzIsMCwiQiJdLFsyLDIsIkIiXSxbMCwyLCJBIl0sWzAsMywidyIsMl0sWzEsMiwidSBcXGNpcmMgdyBcXGNpcmMgdV57LTF9Il0sWzAsMSwidSJdLFszLDIsInUiLDJdXQ==
+\[\begin{tikzcd}
+	A && B \\
+	\\
+	A && B
+	\arrow["w"', from=1-1, to=3-1]
+	\arrow["{u w u^{-1}}", from=1-3, to=3-3]
+	\arrow["u", from=1-1, to=1-3]
+	\arrow["u"', from=3-1, to=3-3]
+\end{tikzcd}\]
+
+\subsection{Category of Representations}
+
+Given a group $G$ let $\rho : G \ra \text{Aut}(A)$ and $\rho : G \ra \text{Aut}(A^\prime)$ be representation of group $G$ on 2 objects $A$ and $A^\prime$ of category $\mab{a}$.\\ 
+
+Let $\mab{a}_G$ be category whose objects are representation of group $G$ on objects of $\mab{a}$ like the ones given above, let morphisms between representations be morphisms like $h$ in $\mab{a}$ which makes the following diagram commutative for all $x\in G$.
+
+% https://q.uiver.app/#q=WzAsNCxbMCwwLCJBIl0sWzIsMCwiQV5cXHByaW1lIl0sWzIsMiwiQV5cXHByaW1lIl0sWzAsMiwiQSJdLFswLDMsIlxccmhvKHgpIiwyXSxbMywyLCJoIiwyXSxbMSwyLCJcXHJob15cXHByaW1lKHgpIl0sWzAsMSwiaCJdXQ==
+\[\begin{tikzcd}
+	A && {A^\prime} \\
+	\\
+	A && {A^\prime}
+	\arrow["{\rho(x)}"', from=1-1, to=3-1]
+	\arrow["h"', from=3-1, to=3-3]
+	\arrow["{\rho^\prime(x)}", from=1-3, to=3-3]
+	\arrow["h", from=1-1, to=1-3]
+\end{tikzcd}\]
+
+Indexing $h$ with $\rho$ and $\rho^\prime$ ensures \textit{CAT 1} is satisfied and it is easy to verify \textit{CAT 2} is also satisfied with the Identity morphism in $\mab{a}$ acting as the identity morphism from a representation to itself as the following diagram commutes for any automorphism $f$ of $A$ into itself.
+
+\[\begin{tikzcd}
+	A && {A} \\
+	\\
+	A && {A}
+	\arrow["f"', from=1-1, to=3-1]
+	\arrow["{\text{Id}_A}"', from=3-1, to=3-3]
+	\arrow["f", from=1-3, to=3-3]
+	\arrow["{\text{Id}_A}", from=1-1, to=1-3]
+\end{tikzcd}\]
+
+To verify \textit{CAT 3} let's start with 3 objects of $\mab{a}_G$ and morphisms between them, ie the following diagrams are commutative for all $x \in G$,
+
+% https://q.uiver.app/#q=WzAsOCxbMCwwLCJBIl0sWzIsMCwiQV5cXHByaW1lIl0sWzIsMiwiQV5cXHByaW1lIl0sWzAsMiwiQSJdLFs0LDAsIkFeXFxwcmltZSJdLFs0LDIsIkFeXFxwcmltZSJdLFs2LDAsIkFee1xccHJpbWUgXFxwcmltZX0iXSxbNiwyLCJBXntcXHByaW1lIFxccHJpbWV9Il0sWzAsMywiXFxyaG8oeCkiLDJdLFszLDIsImhfMSIsMl0sWzEsMiwiXFxyaG9eXFxwcmltZSh4KSJdLFswLDEsImhfMSJdLFs0LDUsIlxccmhvXlxccHJpbWUoeCkiLDJdLFs2LDcsIlxccmhvXntcXHByaW1lIFxccHJpbWV9KHgpIl0sWzQsNiwiaF8yIl0sWzUsNywiaF8yIiwyXV0=
+\[\begin{tikzcd}
+	A && {A^\prime} && {A^\prime} && {A^{\prime \prime}} \\
+	\\
+	A && {A^\prime} && {A^\prime} && {A^{\prime \prime}}
+	\arrow["{\rho(x)}"', from=1-1, to=3-1]
+	\arrow["{h_1}"', from=3-1, to=3-3]
+	\arrow["{\rho^\prime(x)}", from=1-3, to=3-3]
+	\arrow["{h_1}", from=1-1, to=1-3]
+	\arrow["{\rho^\prime(x)}"', from=1-5, to=3-5]
+	\arrow["{\rho^{\prime \prime}(x)}", from=1-7, to=3-7]
+	\arrow["{h_2}", from=1-5, to=1-7]
+	\arrow["{h_2}"', from=3-5, to=3-7]
+\end{tikzcd}\]
+
+Now we have,
+
+% https://q.uiver.app/#q=WzAsNixbMCwwLCJBIl0sWzIsMCwiQV5cXHByaW1lIl0sWzIsMiwiQV5cXHByaW1lIl0sWzAsMiwiQSJdLFs0LDAsIkFee1xccHJpbWVcXHByaW1lfSJdLFs0LDIsIkFee1xccHJpbWVcXHByaW1lfSJdLFswLDMsIlxccmhvKHgpIiwyXSxbMywyLCJoXzEiLDJdLFsxLDIsIlxccmhvXlxccHJpbWUoeCkiXSxbMCwxLCJoXzEiXSxbNCw1LCJcXHJob157XFxwcmltZSBcXHByaW1lfSh4KSJdLFsyLDUsImhfMiIsMl0sWzEsNCwiaF8yIl1d
+\[\begin{tikzcd}
+	A && {A^\prime} && {A^{\prime\prime}} \\
+	\\
+	A && {A^\prime} && {A^{\prime\prime}}
+	\arrow["{\rho(x)}"', from=1-1, to=3-1]
+	\arrow["{h_1}"', from=3-1, to=3-3]
+	\arrow["{\rho^\prime(x)}", from=1-3, to=3-3]
+	\arrow["{h_1}", from=1-1, to=1-3]
+	\arrow["{\rho^{\prime \prime}(x)}", from=1-5, to=3-5]
+	\arrow["{h_2}"', from=3-3, to=3-5]
+	\arrow["{h_2}", from=1-3, to=1-5]
+\end{tikzcd}\]
+
+And hence the following diagram is also commutative,
+
+% https://q.uiver.app/#q=WzAsNCxbMCwwLCJBIl0sWzAsMiwiQSJdLFs0LDAsIkFee1xccHJpbWVcXHByaW1lfSJdLFs0LDIsIkFee1xccHJpbWVcXHByaW1lfSJdLFswLDEsIlxccmhvKHgpIiwyXSxbMiwzLCJcXHJob157XFxwcmltZSBcXHByaW1lfSh4KSJdLFswLDIsImhfMSBcXGNpcmMgaF8yIl0sWzEsMywiaF8xIFxcY2lyYyBoXzIiLDJdXQ==
+\[\begin{tikzcd}
+	A &&&& {A^{\prime\prime}} \\
+	\\
+	A &&&& {A^{\prime\prime}}
+	\arrow["{\rho(x)}"', from=1-1, to=3-1]
+	\arrow["{\rho^{\prime \prime}(x)}", from=1-5, to=3-5]
+	\arrow["{h_1 \circ h_2}", from=1-1, to=1-5]
+	\arrow["{h_1 \circ h_2}"', from=3-1, to=3-5]
+\end{tikzcd}\]
+
+Therefore law of composition of $\mab{a}_G$ is simple composing morphisms in $\mab{a}$.
+
+Let us now cosider the category Ab, the category of abelian groups, let $A$ be an abelian group and $G$ any group, consider a group homomorphism $\rho : G \ra \text{Aut}(A)$, ie: a representation of $G$ on object $A$ in thecategory of abelian groups,\\
+
+let us represent $\rho(x)(a)$ with $x . a$, \\
+
+let $x,y \in G$ and $a,b \in A$, then we have,
+
+\[ x.(y.a) = (xy).a \]
+
+\[ x.(a+b) = x.a + x.b \]
+
+\[ e.a = a \]
+
+\[ x.0 = 0 \]
+
+where $+$ is the binary operation of $A$ and identity elements of $G$ and $A$ are $e$ and $0$ repectively.\\
+
+When $G$ acts on itself by conjugation, $G$ operates on itself as a set as well as in the category of groups, for each $x\in G$ corresponds an operation $\Phi$ such that,
+
+\[ \Phi : G \ra \mab{O}, x \ra \rho(x \_) \]
+
+where $\mab{O}$ is the set of all representation of $G$ on object $A$ in the category of abelian groups,
+
+\[ \rho(x\_) : G \ra \text{Aut}(A), g \ra \rho(xy) \in \text{Aut}(A). \]
+
+\subsection{Category of Morphisms}
+
+Let $\mab{a}$ be a category and let $\mab{c}$ be a category whose objects are the morphisms of $\mab{a}$, if $f \in \text{Mor}(A,B)$ $f^\prime \in \text{Mor}(A^\prime,B^\prime)$ be two objects in $\mab{c}$ then let morphisms in $\mab{c}$ of $f$ into $f^\prime$ be ordered pair $(\psi, \varphi)$\\
+
+where $\psi$ and $\varphi$ are morphisms in $\mab{a}$, $\psi \in \text{Mor}(A,A^\prime)$, $\varphi \in \text{Mor}(B,B^\prime)$, and makes the following diagram commutative,
+
+% https://q.uiver.app/#q=WzAsNCxbMCwwLCJBIl0sWzIsMCwiQV5cXHByaW1lIl0sWzAsMiwiQiJdLFsyLDIsIkJeXFxwcmltZSJdLFswLDIsImYiLDJdLFsxLDMsImZeXFxwcmltZSJdLFswLDEsIlxccHNpIl0sWzIsMywiXFx2YXJwaGkiLDJdXQ==
+\[\begin{tikzcd}
+	A && {A^\prime} \\
+	\\
+	B && {B^\prime}
+	\arrow["f"', from=1-1, to=3-1]
+	\arrow["{f^\prime}", from=1-3, to=3-3]
+	\arrow["\psi", from=1-1, to=1-3]
+	\arrow["\varphi"', from=3-1, to=3-3]
+\end{tikzcd}\]
+
+To satisfy \textit{CAT 1} the ordered pair must be indexed with $f$ and $f^\prime$, to satisfy \textit{CAT 2} it is easy to verify $($Id$_A$,Id$_B)$ satisfies as the identity morphism, ie the following diagram commutes,
+
+\[\begin{tikzcd}
+	A && {A} \\
+	\\
+	B && {B}
+	\arrow["f"', from=1-1, to=3-1]
+	\arrow["{f}", from=1-3, to=3-3]
+	\arrow["{\text{Id}_A}", from=1-1, to=1-3]
+	\arrow["{\text{Id}_B}"', from=3-1, to=3-3]
+\end{tikzcd}\]
+
+To see if \textit{CAT 3} is satisfied let us start with 3 objects of $\mab{c}$ and 2 morphisms between them, ie, the following diagrams are commutative,
+
+% https://q.uiver.app/#q=WzAsOCxbMCwwLCJBIl0sWzIsMCwiQV5cXHByaW1lIl0sWzAsMiwiQiJdLFsyLDIsIkJeXFxwcmltZSJdLFs0LDAsIkFeXFxwcmltZSJdLFs0LDIsIkJeXFxwcmltZSJdLFs2LDAsIkFee1xccHJpbWVcXHByaW1lfSJdLFs2LDIsIkJee1xccHJpbWVcXHByaW1lfSJdLFswLDIsImYiLDJdLFsxLDMsImZeXFxwcmltZSJdLFswLDEsIlxccHNpIl0sWzIsMywiXFx2YXJwaGkiLDJdLFs0LDUsImZeXFxwcmltZSIsMl0sWzYsNywiZl57XFxwcmltZVxccHJpbWV9Il0sWzQsNiwiXFxwc2leXFxwcmltZSJdLFs1LDcsIlxcdmFycGhpXlxccHJpbWUiLDJdXQ==
+\[\begin{tikzcd}
+	A && {A^\prime} && {A^\prime} && {A^{\prime\prime}} \\
+	\\
+	B && {B^\prime} && {B^\prime} && {B^{\prime\prime}}
+	\arrow["f"', from=1-1, to=3-1]
+	\arrow["{f^\prime}", from=1-3, to=3-3]
+	\arrow["\psi", from=1-1, to=1-3]
+	\arrow["\varphi"', from=3-1, to=3-3]
+	\arrow["{f^\prime}"', from=1-5, to=3-5]
+	\arrow["{f^{\prime\prime}}", from=1-7, to=3-7]
+	\arrow["{\psi^\prime}", from=1-5, to=1-7]
+	\arrow["{\varphi^\prime}"', from=3-5, to=3-7]
+\end{tikzcd}\]
+
+Now we have,
+
+% https://q.uiver.app/#q=WzAsNixbMCwwLCJBIl0sWzAsMiwiQiJdLFs0LDIsIkJee1xccHJpbWVcXHByaW1lfSJdLFs0LDAsIkFee1xccHJpbWVcXHByaW1lfSJdLFsyLDIsIkJeXFxwcmltZSJdLFsyLDAsIkFeXFxwcmltZSJdLFswLDEsImYiLDJdLFszLDIsImZee1xccHJpbWVcXHByaW1lfSJdLFsxLDQsIlxcdmFycGhpIiwyXSxbNSw0LCJmXlxccHJpbWUiXSxbMCw1LCJcXHBzaSJdLFs1LDMsIlxccHNpXlxccHJpbWUiXSxbNCwyLCJcXHZhcnBoaV5cXHByaW1lIiwyXV0=
+\[\begin{tikzcd}
+	A && {A^\prime} && {A^{\prime\prime}} \\
+	\\
+	B && {B^\prime} && {B^{\prime\prime}}
+	\arrow["f"', from=1-1, to=3-1]
+	\arrow["{f^{\prime\prime}}", from=1-5, to=3-5]
+	\arrow["\varphi"', from=3-1, to=3-3]
+	\arrow["{f^\prime}", from=1-3, to=3-3]
+	\arrow["\psi", from=1-1, to=1-3]
+	\arrow["{\psi^\prime}", from=1-3, to=1-5]
+	\arrow["{\varphi^\prime}"', from=3-3, to=3-5]
+\end{tikzcd}\]
+
+And hence,
+
+% https://q.uiver.app/#q=WzAsNCxbMCwwLCJBIl0sWzAsMiwiQiJdLFs0LDIsIkJee1xccHJpbWVcXHByaW1lfSJdLFs0LDAsIkFee1xccHJpbWVcXHByaW1lfSJdLFswLDEsImYiLDJdLFszLDIsImZee1xccHJpbWVcXHByaW1lfSJdLFswLDMsIlxccHNpIFxcY2lyYyBcXHBzaV5cXHByaW1lIl0sWzEsMiwiXFx2YXJwaGlcXGNpcmNcXHZhcnBoaV5cXHByaW1lIiwyXV0=
+\[\begin{tikzcd}
+	A &&&& {A^{\prime\prime}} \\
+	\\
+	B &&&& {B^{\prime\prime}}
+	\arrow["f"', from=1-1, to=3-1]
+	\arrow["{f^{\prime\prime}}", from=1-5, to=3-5]
+	\arrow["{\psi \circ \psi^\prime}", from=1-1, to=1-5]
+	\arrow["{\varphi\circ\varphi^\prime}"', from=3-1, to=3-5]
+\end{tikzcd}\]
+
+Therefore $(\psi,\varphi) \oo (\psi^\prime,\varphi^\prime) = (\psi \oo \psi ^ \prime,\varphi \oo \varphi ^ \prime)$ in the category of morphisms.\\
+
+Similarly we can construct other categories, where we fix objects to be morphisms of fixed arrival or departure. For given category $\mab{a}$ we denote category of morphisms with fixed arrival $A$ as $\mab{a}_A$ and for fixed departure $A$ we denote it as $\mab{a}^A$.\\
+
+
+For $f\in \text{Mor}(X,A)$ and $g\in \text{Mor}(Y,A)$, morphisms of $f$ into $g$ are morphisms $h \in \text{Ar}(\mab{a})$ such that the following diagram commutes,
+
+% https://q.uiver.app/#q=WzAsMyxbMCwwLCJYIl0sWzIsMCwiWSJdLFsxLDIsIkEiXSxbMCwyLCJmIiwyXSxbMSwyLCJnIl0sWzAsMSwiaCJdXQ==
+\[\begin{tikzcd}
+	X && Y \\
+	\\
+	& A
+	\arrow["f"', from=1-1, to=3-2]
+	\arrow["g", from=1-3, to=3-2]
+	\arrow["h", from=1-1, to=1-3]
+\end{tikzcd}\]
+
+Here $f$ and $g$ are objects in $\mab{a}_A$.\\
+
+For $p\in \text{Mor}(X,A)$ and $q\in \text{Mor}(Y,A)$, morphisms of $p$ into $q$ are morphisms $h \in \text{Ar}(\mab{a})$ such that the following diagram commutes,
+
+% https://q.uiver.app/#q=WzAsMyxbMCwwLCJYIl0sWzIsMCwiWSJdLFsxLDIsIkEiXSxbMCwxLCJoIl0sWzIsMCwicCJdLFsyLDEsInEiLDJdXQ==
+\[\begin{tikzcd}
+	X && Y \\
+	\\
+	& A
+	\arrow["h", from=1-1, to=1-3]
+	\arrow["p", from=3-2, to=1-1]
+	\arrow["q"', from=3-2, to=1-3]
+\end{tikzcd}\]
+
+Here $p$ and $q$ are objects in $\mab{a}^A$.\\
+
+\section{Universal Objects}
+
+\begin{definition}[Universal attractor]
+	Let $\mab{c}$ be a category, $p$ an object in $\mab{c}$ is said to be universally attracting if the set Mor$(X,p)$ is a singleton set for all $X \in \text{Ob}(\mab{c})$. 
+\end{definition}
+
+\begin{definition}[Universal repeller]
+	Let $\mab{c}$ be a category, $p$ an object in $\mab{c}$ is said to be universally repelling if the set Mor$(p,X)$ is a singleton set for all $X \in \text{Ob}(\mab{c})$. 
+\end{definition}
+
+If there is no ambiguity we refer to both of the above as universal objects.
+
+\begin{proposition}[]
+	If $p$ is universally attracting and $q$ is universally repelling then there is an isomorphism between them.
+\end{proposition}
+
+\begin{proof}
+	Let $f$ be the unique morphism of $p$ into $q$, and let $g$ be the unique morphism of $q$ into $p$. $f \oo g$ is a morphism of $q$ into itself and since $q$ is univerally repelling, it is unique and hence the identity morphism and hence $f$ is an isomorphism and similarly for $g$.
+\end{proof}
+
+\begin{example}[Trivial group]
+	$\{e\}$ is both universally repelling and universally attracting in the category of groups as the only group homomorphism from and to $\{e\}$ is the constant function to the identity element.
+\end{example}
+
+%\begin{example}[]
+%	Let $S$ be a set, let $\mab{c}$ be the category of maps $f : S \ra A$ where $A$ is an abelian group. Let $f : S \ra A$ and $f^\prime : S \ra A^\prime$ be 2 objects in $\mab{c}$, then elements of Mor$(f,f^\prime)$ are group homomorphisms $h : A \ra A^\prime$ such that the following diagram commutes,
+
+%\end{example}
+
+\section{Products and Coproducts}
+
+\subsection{Product}
+
+\begin{definition}[Product of 2 objects]
+	Let $\mab{a}$ be a category and let $A$ and $B$ be 2 objects, ordered pair $(P,\{f,g\})$ is said to be product of $A$ and $B$ if $P$ is an object of $\mab{a}$, $f \in \text{Mor}(P,A)$ and $g \in \text{Mor}(P,B)$ and follow the following property,\\
+
+	Given $\psi \in \text{Mor}(C,A)$ and $\phi \in \text{Mor}(C,B)$ (where $C$ is an object in $\mab{a}$), the there exist an unique $h \in \text{Mor}(C,P)$ such that the following diagram commutes,
+
+% https://q.uiver.app/#q=WzAsNCxbMiwyLCJQIl0sWzIsMCwiQyJdLFs0LDIsIkIiXSxbMCwyLCJBIl0sWzAsMiwiZyIsMl0sWzEsMiwiXFxwaGkiXSxbMSwwLCJcXGV4aXN0cyAhaCIsMSx7InN0eWxlIjp7ImJvZHkiOnsibmFtZSI6ImRhc2hlZCJ9fX1dLFsxLDMsIlxccHNpIiwyXSxbMCwzLCJmIl1d
+\[\begin{tikzcd}
+	&& C \\
+	\\
+	A && P && B
+	\arrow["g"', from=3-3, to=3-5]
+	\arrow["\phi", from=1-3, to=3-5]
+	\arrow["{\exists !h}"', dashed, from=1-3, to=3-3]
+	\arrow["\psi"', from=1-3, to=3-1]
+	\arrow["f", from=3-3, to=3-1]
+\end{tikzcd}\]
+
+
+ie: $\psi = f \oo g$ and $\phi = g \oo h$. More generally we have,
+
+\end{definition}
+
+\begin{definition}[Product of a family of objects]
+	Let $\mab{a}$ be a category and let $\{A_i\}_{i \in I}$ be a family of objects, ordered pair $(P,\{f_i\}_{i \in I})$ is said to be product of $\{A_i\}_{i \in I}$ if $P$ is an object of $\mab{a}$ and $f_i \in \text{Mor}(P,A_i)$ for all $i\in I$ and follow the following property,\\
+
+	Given an object $C$ in $\mab{a}$ and family of morphisms $\{ g_i \in \text{Mor}(C,A_i) \}_{i\in I}$ there exist unique $h \in \text{Mor}(C,P)$ such that the following diagram commutes for all $i \in I$,
+
+% https://q.uiver.app/#q=WzAsMyxbMCwwLCJDIl0sWzAsMSwiUCJdLFsyLDEsIkFfaSJdLFswLDEsIntcXGV4aXN0cyAhIGh9IiwyLHsic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoiZGFzaGVkIn19fV0sWzAsMiwie2dfaX0iXSxbMSwyLCJ7Zl9pfSIsMl1d
+\[\begin{tikzcd}
+	C \\
+	P && {A_i}
+	\arrow["{{\exists ! h}}"', dashed, from=1-1, to=2-1]
+	\arrow["{{g_i}}", from=1-1, to=2-3]
+	\arrow["{{f_i}}"', from=2-1, to=2-3]
+\end{tikzcd}\]
+
+ie: $f_i \oo h = g_i$ for all $i \in I$.
+
+\end{definition}
+
+\begin{example}[Product of sets]
+	Let $\mab{s}$ be the category of sets and let $\{a_i\}_{i \in I}$ be a family of sets, let $A$ be the cartesian product of the family of sets  $\{a_i\}_{i \in I}$ and let  $p_i : A \ra a_i$ be the projection on the i$^\text{th}$ factor. It is easy to verify that $(A, \{p_i\}_{i \in I})$ is a product of $\{a_i\}_{i \in I}$.
+\end{example}
+
+\begin{example}[Direct product of groups]
+	Let $\{G_i\}_{i \in I}$ be a family of groups, recall the definition of direct product of groups, let $(G, \{\pi_i\}_{i \in I})$ be the direct product of the family of groups. By defintion of direct product, it is easy to see direct product of groups is the product in the category of groups.
+\end{example}
+
+\begin{example}[Product as universal objects]
+	Let $\{A_i\}_{i \in I}$ be a family of objects in a category $\mab{a}$, let $\mab{c}$ be a category whose objects are $(X, \{f_i\}_{i \in I})$ where $X \in \text{Ob}(\mab{a}$ and $f_i \in \text{Mor}(X,A_i) \forall i \in I$ and morphisms of $(X, \{f_i\}_{i \in I})$ into $(Y, \{g_i\}_{i \in I})$ are morphisms $h \in \text{Mor}(X,Y)$ such that $f_i = g_i \oo h$ for all $i \in I$. \\
+
+	We can see that product of family of objects $\{A_i\}_{i \in I}$ is an universal object in $\mab{c}$.
+\end{example}
+
+\subsection{Coproduct}
+
+\begin{definition}[Coproduct of a family of objects]
+	Let $\mab{a}$ be a category and let $\{A_i\}_{i \in I}$ be a family of objects, ordered pair $(S,\{f_i\}_{i \in I})$ is said to be product of $\{A_i\}_{i \in I}$ if $S$ is an object of $\mab{a}$ and $f_i \in \text{Mor}(A_i,S)$ for all $i\in I$ and follow the following property,\\
+
+	Given an object $C$ in $\mab{a}$ and family of morphisms $\{ g_i \in \text{Mor}(A_i,C) \}_{i\in I}$ there exist unique $h \in \text{Mor}(S,C)$ such that the following diagram commutes for all $i \in I$,
+
+% https://q.uiver.app/#q=WzAsNCxbMCwwLCJDIl0sWzAsMSwiUyJdLFsyLDEsIkFfaSJdLFsxLDJdLFsxLDAsInt7XFxleGlzdHMgISBofX0iLDAseyJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJkYXNoZWQifX19XSxbMiwwLCJ7e2dfaX19IiwyXSxbMiwxLCJ7e2ZfaX19Il1d
+\[\begin{tikzcd}
+	C \\
+	S && {A_i} \\
+	& {}
+	\arrow["{{{\exists ! h}}}", dashed, from=2-1, to=1-1]
+	\arrow["{{{g_i}}}"', from=2-3, to=1-1]
+	\arrow["{{{f_i}}}", from=2-3, to=2-1]
+\end{tikzcd}\]
+
+ie: $h \oo f_i = g_i$ for all $i \in I$.
+
+\end{definition}
+
+\begin{example}[Coproduct of sets]
+	Let $\mab{s}$ be the category of sets, let $s_1$ and $s_2$ be 2 sets and let $t$ be a set having the same cardinality as $s_2$ and disjoint from $s_1$, let $f_1 : s_1 \ra s_1$ be identity map and $f_2: s_2 \ra t$ be a bijection. Let $U$ be the union of $s_1$ and $t$, then $(U,\{g_1,g_2\})$ is coproduct of $s_1$ and $s_2$ where $g_i: s_i \ra U$ and $g_i(x) = f_i(x) \forall x \in s_i$.  
+\end{example}
+
+\begin{example}[]
+	Let $\mab{s}_\oo$ be the category of pointed sets, pointed sets are ordered pairs $(s,x)$ where $x \in s$. Morphisms of $(s,x)$ into $(s^\prime,x^\prime)$ are maps $f: s \ra s^\prime$ such that $f(x) = x^\prime$. Coproduct of $(s,x)$ and $(s^\prime,x^\prime)$ can be constructed as follows,\\ 
+	let $t$ be a set with the same cardinality as $s^\prime$ and $t \cap s = \{x\}$, let $U = t \cup s$ and let $f_1 : s \ra U, f_1(a) = a$ and $f_2: s^\prime \ra U$ where $f_2$ induces a bijection from $s^\prime - \{x\}$ to $t - \{x\}$ and now we have $(U, \{f_1, f_2\})$ as the co product.
+\end{example}
+
+\newpage
+
+\begin{example}[Coproduct as universal objects]
+	Let $\{A_i\}_{i \in I}$ be a family of objects in a category $\mab{a}$, let $\mab{c}$ be a category whose objects are $(X, \{f_i\}_{i \in I})$ where $X \in \text{Ob}(\mab{a}$ and $f_i \in \text{Mor}(A_i,X) \forall i \in I$ and morphisms of $(X, \{f_i\}_{i \in I})$ into $(Y, \{g_i\}_{i \in I})$ are morphisms $h \in \text{Mor}(X,Y)$ such that $h \oo f_i = g_i $ for all $i \in I$. \\
+
+	We can see that coproduct of family of objects $\{A_i\}_{i \in I}$ is an universal object in $\mab{c}$.
+\end{example}
+
+\section{Fibered products and coproducts}
+
+\begin{definition}[Category over $Z$]
+	Let $\mab{c}$ be a category, and let $Z$ be an object category over $Z$ denoted by $\mab{c}_Z$ is the category whose objects are morphisms in $\mab{c}$ with fixed arrival $Z$ and whose morphisms are given as follows, morphisms of $f \in \text{Mor}(X,Z)$ into $g \in \text{Mor}(Y,Z)$ are morphisms $h \in \text{Mor}(X,Y)$ which makes the following diagram commutative,
+
+% https://q.uiver.app/#q=WzAsMyxbMCwwLCJYIl0sWzIsMCwiWSJdLFsxLDIsIloiXSxbMCwxLCJoIl0sWzAsMiwiZiIsMl0sWzEsMiwiZyJdXQ==
+\[\begin{tikzcd}
+	X && Y \\
+	\\
+	& Z
+	\arrow["h", from=1-1, to=1-3]
+	\arrow["f"', from=1-1, to=3-2]
+	\arrow["g", from=1-3, to=3-2]
+\end{tikzcd}\]
+
+ie: $h \oo g = f$.
+\end{definition}
+
+\begin{definition}[Fibered Product]
+	A product in the category $\mab{c}_Z$ is called the fibered product of morphisms in $\mab{c}$ and is denoted with $X \times_Z Y$.
+\end{definition}
+
+Clarfying the above definition with commutative diagrams, \\
+
+Fibered product of $f \in \text{Mor}(X,Z)$ and $g \in \text{Mor}(Y,Z)$ is $s \in \text{Mor}(X\times_ZY,Z)$ along with morphisms $p_1$ and $p_2$ such that following diagram commutes,
+
+% https://q.uiver.app/#q=WzAsNCxbMCwwLCJYXFx0aW1lc19aWSJdLFswLDIsIlgiXSxbMiwwLCJZIl0sWzIsMiwiWiJdLFsxLDMsImYiLDJdLFsyLDMsImciXSxbMCwxLCJwXzEiLDJdLFswLDIsInBfMiJdLFswLDMsInMiLDEseyJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJkYXNoZWQifX19XV0=
+\[\begin{tikzcd}
+	{X\times_ZY} && Y \\
+	\\
+	X && Z
+	\arrow["f"', from=3-1, to=3-3]
+	\arrow["g", from=1-3, to=3-3]
+	\arrow["{p_1}"', from=1-1, to=3-1]
+	\arrow["{p_2}", from=1-1, to=1-3]
+	\arrow["s"{description}, dashed, from=1-1, to=3-3]
+\end{tikzcd}\]
+
+(Here $p_1$ is called the pull back of $g$ by $f$ and $p_2$ is called the pull back of $f$ by $g$)
+
+satisfying the following property, given $T$, an object in $\mab{c}$ and morphisms of $C$ into $X$ and $Y$ with the following diagram commutative,
+
+% https://q.uiver.app/#q=WzAsNCxbMCwwLCJUIl0sWzAsMiwiWCJdLFsyLDAsIlkiXSxbMiwyLCJaIl0sWzEsMywiZiIsMl0sWzIsMywiZyJdLFswLDEsIngiLDJdLFswLDIsInkiXSxbMCwzLCJ0IiwxLHsic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoiZGFzaGVkIn19fV1d
+\[\begin{tikzcd}
+	T && Y \\
+	\\
+	X && Z
+	\arrow["f"', from=3-1, to=3-3]
+	\arrow["g", from=1-3, to=3-3]
+	\arrow["x"', from=1-1, to=3-1]
+	\arrow["y", from=1-1, to=1-3]
+	\arrow["t"{description}, dashed, from=1-1, to=3-3]
+\end{tikzcd}\]
+
+\newpage
+
+Then there exists an unique morphisms $h$ of $T$ into $X\times_ZY$ and the following diagram commutes,
+
+% https://q.uiver.app/#q=WzAsNSxbMSwxLCJYXFx0aW1lc19aWSJdLFsxLDMsIlgiXSxbMywxLCJZIl0sWzMsMywiWiJdLFswLDAsIlQiXSxbMSwzLCJmIiwyXSxbMiwzLCJnIl0sWzAsMSwicF8xIiwyXSxbMCwyLCJwXzIiXSxbNCwwLCJoIiwxXSxbNCwxLCJ4IiwyLHsiY3VydmUiOjJ9XSxbNCwyLCJ5IiwwLHsiY3VydmUiOi0yfV1d
+\[\begin{tikzcd}
+	T \\
+	& {X\times_ZY} && Y \\
+	\\
+	& X && Z
+	\arrow["f"', from=4-2, to=4-4]
+	\arrow["g", from=2-4, to=4-4]
+	\arrow["{p_1}"', from=2-2, to=4-2]
+	\arrow["{p_2}", from=2-2, to=2-4]
+	\arrow["h"{description}, from=1-1, to=2-2]
+	\arrow["x"', curve={height=12pt}, from=1-1, to=4-2]
+	\arrow["y", curve={height=-12pt}, from=1-1, to=2-4]
+\end{tikzcd}\]
+
+
+\begin{definition}[Category under $Z$]
+	Let $\mab{c}$ be a category, and let $Z$ be an object, category undere $Z$ denoted by $\mab{c}^Z$ is the category whose objects are morphisms in $\mab{c}$ with fixed departure $Z$ and whose morphisms are given as follows, morphisms of $f \in \text{Mor}(Z,X)$ into $g \in \text{Mor}(Z,Y)$ are morphisms $h \in \text{Mor}(X,Y)$ which makes the following diagram commutative,
+
+% https://q.uiver.app/#q=WzAsNCxbMSwwLCJYIl0sWzMsMCwiWSJdLFsyLDIsIloiXSxbMCwxXSxbMCwxLCJoIl0sWzIsMCwiZiJdLFsyLDEsImciLDJdXQ==
+\[\begin{tikzcd}
+	& X && Y \\
+	{} \\
+	&& Z
+	\arrow["h", from=1-2, to=1-4]
+	\arrow["f", from=3-3, to=1-2]
+	\arrow["g"', from=3-3, to=1-4]
+\end{tikzcd}\]
+
+ie: $h \oo g = f$.
+\end{definition}
+
+\begin{definition}[Fibered Coproduct]
+	A product in the category $\mab{c}Z$ is called the fibered product of morphisms in $\mab{c}$ and is denoted with $X \amalg_ZY$.
+\end{definition}
+
+Similar to how fibered product was expressed with commutativ diagram, fibered coproduct can visualized with the following commutative diagram,
+
+% https://q.uiver.app/#q=WzAsNSxbMSwxLCJYXFxhbWFsZ19aWSJdLFsxLDMsIlgiXSxbMywxLCJZIl0sWzMsMywiWiJdLFswLDAsIlQiXSxbMywxLCJmIl0sWzMsMiwiZyIsMl0sWzEsMCwicV8xIl0sWzIsMCwicV8yIiwyXSxbNCwwLCJoIiwxXSxbMSw0LCJ4IiwwLHsiY3VydmUiOi0yfV0sWzIsNCwieSIsMix7ImN1cnZlIjoyfV1d
+\[\begin{tikzcd}
+	T \\
+	& {X\amalg_ZY} && Y \\
+	\\
+	& X && Z
+	\arrow["f", from=4-4, to=4-2]
+	\arrow["g"', from=4-4, to=2-4]
+	\arrow["{q_1}", from=4-2, to=2-2]
+	\arrow["{q_2}"', from=2-4, to=2-2]
+	\arrow["h"{description}, from=1-1, to=2-2]
+	\arrow["x", curve={height=-12pt}, from=4-2, to=1-1]
+	\arrow["y"', curve={height=12pt}, from=2-4, to=1-1]
+\end{tikzcd}\]
+
+Here $q_1$ is called the push out of $g$ by $f$ and $q_2$ is called the push back of $f$ by $g$.
+
+\section{Functors}
+
+\subsection{Definitions}
+
+\begin{definition}[Covarient Functor]
+	Let $\mab{a}, \mab{b}$ be categories. A covarient functor $F$ of $\mab{a}$ into $\mab{b}$ is a rule which associates to each object $A \in \mab{a}$ an object $F(A) \in \mab{b}$ and to each morphisms $f \in \text{Mor}(A,B)$ a morphism $F(f) \in \text{Mor}(F(A),F(B))$ while satisfying the following axioms,
+	\begin{itemize}
+		\item \textit{FUN 1} For all $A \in \mab{a}$ we have $F(\text{Id}_A) = \text{Id}_{F(A)}$.
+		\item \textit{FUN 2} For $f \in \text{Mor}(A,B)$ and $g \in \text{Mor}(B,C)$ we have $F(g \oo f) = F(g) \oo F(f)$.
+	\end{itemize}
+\end{definition}
+
+\newpage
+
+\begin{definition}[Cotravarient Functor]
+	Let $\mab{a}, \mab{b}$ be categories. A covarient functor $F$ of $\mab{a}$ into $\mab{b}$ is a rule which associates to each object $A \in \mab{a}$ an object $F(A) \in \mab{b}$ and to each morphisms $f \in \text{Mor}(A,B)$ a morphism $F(f) \in \text{Mor}(F(B),F(A))$ while satisfying the following axioms,
+	\begin{itemize}
+		\item \textit{FUN 1} For all $A \in \mab{a}$ we have $F(\text{Id}_A) = \text{Id}_{F(A)}$.
+		\item \textit{FUN 2} For $f \in \text{Mor}(A,B)$ and $g \in \text{Mor}(B,C)$ we have $F(g \oo f) = F(f) \oo F(g)$.
+	\end{itemize}
+\end{definition}
+
+\begin{example}[]
+	Let $\mab{c}$ be a category and for $f \in \text{Mor}(A,B)$, we say $g \in \text{Mor}(B,A)$ is the section of $f$ if $f \oo g = \text{Id}_A$. Let $H$ be a functor from $\mab{c}$ to the category of groups, let $f \in \text{Mor}(A,B)$ then if $H(B) = \{e\}$ while $H(A) \neq \{e\}$, then there does not exist a section of $f$. Since, $H(g \oo f) = \text{Id}_{H(A)}$ and $H(f)$ is the trivial homorphism, which is the identity morphism in the category of groups.
+\end{example}
+
+\begin{example}[Representation Functor]
+	Let $\mab{a}$ be a category and fix object $A$ in $\mab{a}$, then we obtain the covarient functor $M_A$ of $\mab{a}$ into $\mab{s}$ by letting $M_A(X) = \text{Mor}(A,X)$ for any object $X$ in $\mab{a}$ and if $\psi \in \text{Mor}(X,X^\prime)$ then $M_A(\varphi)(g) = \varphi \oo g$.\\
+	Here $\mab{s}$ is a category whose objects are Mor$(A,X)$ and morphisms are $M_A(\phi)$ where $\phi$'s are morphisms in $\mab{a}$.\\
+	Similarly for fixed object $B$ in $\mab{a}$, we obtain the cotravarient functor $M^B$ of $\mab{a}$ into $\mab{s^\prime}$ by letting $M^B(X) = \text{Mor}(X,B)$ for any object $X$ in $\mab{a}$ and if $\psi \in \text{Mor}(X,X^\prime)$ then $M_A(\psi)(g) = g \oo \psi$.\\
+	For both of the functors it is easy to check that \textit{FUN 1} and \textit{FUN 2} are both satisfied.
+\end{example}
+
+\subsection{Natural Transformation}
+
+Let $\mab{a}$ and $\mab{b}$ be two categories then we can view the functors of $\mab{a}$ into $\mab{b}$ as the objects of a category whose morphsisms are given as follows, let $L$ and $M$ be 2 functors of $\mab{a}$ into $\mab{b}$, morphism $H$ of $L$ into $M$ is a rule (called \textbf{natural transformation}) which to each object $X$ of $\mab{a}$ associates a morphism $H_X\in \text{Mor}(L(X),M(X))$ such that for any morphism $f \in \text{Mor}(X,Y)$ the following diagram commutes,
+
+% https://q.uiver.app/#q=WzAsNCxbMCwwLCJMKFgpIl0sWzIsMCwiTShYKSJdLFswLDIsIkwoWSkiXSxbMiwyLCJNKFkpIl0sWzAsMiwiTChmKSIsMl0sWzAsMSwiSF9YIl0sWzEsMywiTShmKSJdLFsyLDMsIkhfWSIsMl1d
+\[\begin{tikzcd}
+	{L(X)} && {M(X)} \\
+	\\
+	{L(Y)} && {M(Y)}
+	\arrow["{L(f)}"', from=1-1, to=3-1]
+	\arrow["{H_X}", from=1-1, to=1-3]
+	\arrow["{M(f)}", from=1-3, to=3-3]
+	\arrow["{H_Y}"', from=3-1, to=3-3]
+\end{tikzcd}\]
+
+And with category of Functors we can talk about isomorphism of functors, a functor is said to be \textbf{representable} if it is isomorphic to a representation functor.
+
+\end{document}
+

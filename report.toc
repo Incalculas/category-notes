@@ -1,0 +1,18 @@
+\babel@toc {english}{}\relax 
+\babel@toc {english}{}\relax 
+\babel@toc {english}{}\relax 
+\contentsline {section}{\numberline {1}Preamble}{2}{section.1}%
+\contentsline {section}{\numberline {2}Basic definitions and examples}{2}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Category}{2}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}Automorphisms operating on Isomorphisms}{3}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}Category of Representations}{4}{subsection.2.3}%
+\contentsline {subsection}{\numberline {2.4}Category of Morphisms}{5}{subsection.2.4}%
+\contentsline {section}{\numberline {3}Universal Objects}{7}{section.3}%
+\contentsline {section}{\numberline {4}Products and Coproducts}{7}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Product}{7}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Coproduct}{8}{subsection.4.2}%
+\contentsline {section}{\numberline {5}Fibered products and coproducts}{9}{section.5}%
+\contentsline {section}{\numberline {6}Functors}{10}{section.6}%
+\contentsline {subsection}{\numberline {6.1}Definitions}{10}{subsection.6.1}%
+\contentsline {subsection}{\numberline {6.2}Natural Transformation}{11}{subsection.6.2}%
+\contentsfinish 
